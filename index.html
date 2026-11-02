@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ระบบบริการการแพทย์แผนไทยและการแพทย์ทางเลือก</title>
+<meta name="description" content="OPD Card แพทย์แผนไทย สำหรับ รพ.สต.">
+<meta name="application-name" content="OPD แผนไทย">
+<meta name="theme-color" content="#3BAF85">
+<meta name="color-scheme" content="light">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; frame-src https://script.google.com https://*.googleusercontent.com; connect-src 'self'; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="OPD แผนไทย">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<style>
+:root{--theme:#3BAF85;--bg:#F3FBF7;--ink:#24413A;--muted:#5E7A72}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI","Noto Sans Thai","Leelawadee UI",Tahoma,sans-serif;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+#app{position:fixed;top:env(safe-area-inset-top,0px);left:env(safe-area-inset-left,0px);width:calc(100% - env(safe-area-inset-left,0px) - env(safe-area-inset-right,0px));height:calc(100% - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));border:0;display:block;background:transparent}
+.layer{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(160deg,#FFFFFF 0%,var(--bg) 70%)}
+[hidden]{display:none!important}
+.card{width:100%;max-width:430px;text-align:center;background:rgba(255,255,255,.9);border-radius:28px;padding:28px 22px;box-shadow:0 18px 50px rgba(36,65,58,.12)}
+.logo{border-radius:26px;box-shadow:0 10px 26px rgba(36,65,58,.16);animation:pop .5s ease both}
+h1{font-size:1.12rem;line-height:1.5;margin:14px 0 4px}
+p{line-height:1.65;margin:.5rem 0}
+.muted{color:var(--muted);font-size:.92rem}
+.spin{width:34px;height:34px;margin:16px auto 6px;border-radius:50%;border:4px solid rgba(36,65,58,.1);border-top-color:var(--theme);animation:spin .9s linear infinite}
+.btn{appearance:none;border:0;border-radius:14px;padding:12px 18px;min-height:46px;font:inherit;font-weight:600;background:var(--theme);color:#fff;cursor:pointer;box-shadow:0 6px 16px rgba(36,65,58,.15)}
+.btn.ghost{background:#fff;color:var(--ink);box-shadow:inset 0 0 0 1.5px rgba(36,65,58,.2)}
+.row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.big{font-size:3rem;line-height:1}
+.tips{text-align:left;margin:.6rem auto 0;padding-left:1.2rem;color:var(--muted);font-size:.92rem;line-height:1.7}
+.sheet{position:fixed;inset:0;z-index:20;display:flex;align-items:flex-end;justify-content:center;background:rgba(20,40,34,.38);animation:fade .2s ease}
+.sheet-card{width:100%;max-width:520px;max-height:90%;overflow:auto;background:#fff;border-radius:26px 26px 0 0;padding:18px 18px calc(18px + env(safe-area-inset-bottom,0px));box-shadow:0 -10px 40px rgba(0,0,0,.16);animation:up .28s cubic-bezier(.2,.8,.2,1)}
+@media (min-width:700px){.sheet{align-items:center}.sheet-card{border-radius:26px}}
+.sheet-h{display:flex;gap:12px;align-items:center;margin-bottom:6px}
+.sheet-h img{border-radius:14px;flex:0 0 auto}
+.sheet-h b{display:block;font-size:1.05rem}
+.sheet-h span{color:var(--muted);font-size:.9rem}
+.x{margin-left:auto;flex:0 0 auto;border:0;background:#EEF4F1;color:var(--ink);border-radius:50%;width:38px;height:38px;font-size:1rem;cursor:pointer}
+.steps{padding-left:1.35rem;line-height:1.7;margin:.5rem 0}
+.steps li{margin:.4rem 0}
+.ico{display:inline-flex;vertical-align:-5px;color:#0A84FF}
+.perks{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:.6rem 0;padding:0;list-style:none;font-size:.9rem}
+.perks li{background:#F3FBF7;border-radius:12px;padding:8px 10px}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(86px + env(safe-area-inset-bottom,0px));z-index:30;display:flex;gap:12px;align-items:center;max-width:calc(100% - 32px);background:#24413A;color:#fff;border-radius:14px;padding:10px 14px;font-size:.95rem;box-shadow:0 10px 30px rgba(0,0,0,.25);animation:up .25s ease}
+#toast button{border:0;background:#fff;color:#24413A;border-radius:10px;padding:6px 10px;font:inherit;font-weight:700;cursor:pointer;white-space:nowrap}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pop{from{transform:scale(.85);opacity:0}}
+@keyframes up{from{transform:translateY(40px);opacity:0}}
+@keyframes fade{from{opacity:0}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<iframe id="app" title="ระบบบริการการแพทย์แผนไทยและการแพทย์ทางเลือก" allow="clipboard-read; clipboard-write; fullscreen; camera; microphone; web-share; autoplay"></iframe>
+
+<div id="splash" class="layer">
+  <div class="card">
+    <img class="logo" src="icon-192.png" alt="" width="96" height="96">
+    <h1>ระบบบริการการแพทย์แผนไทยและการแพทย์ทางเลือก</h1>
+    <div class="spin" aria-hidden="true"></div>
+    <p id="splashMsg" class="muted">กำลังเปิดระบบ…</p>
+    <div id="slow" hidden>
+      <p class="muted">ใช้เวลานานกว่าปกติ อาจเป็นเพราะสัญญาณอินเทอร์เน็ตหรือเซิร์ฟเวอร์ Google ตอบช้า</p>
+      <div class="row"><button type="button" class="btn" data-act="retry">🔄 ลองใหม่</button><button type="button" class="btn ghost" data-act="browser">🌐 เปิดในเบราว์เซอร์</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="offline" class="layer" hidden>
+  <div class="card">
+    <div class="big">📡</div>
+    <h1>ไม่มีการเชื่อมต่ออินเทอร์เน็ต</h1>
+    <p class="muted">ข้อมูลทั้งหมดเก็บอย่างปลอดภัยบน Google Sheets ของหน่วยบริการ จึงต้องออนไลน์เพื่อใช้งาน แอปจะเชื่อมต่อใหม่ให้เองเมื่อสัญญาณกลับมา</p>
+    <ul class="tips"><li>ตรวจสอบ Wi-Fi หรืออินเทอร์เน็ตมือถือ</li><li>ปิดโหมดเครื่องบิน</li><li>ข้อมูล OPD ที่กรอกค้างไว้ถูกเก็บร่างไว้ในเครื่องแล้ว</li></ul>
+    <div class="row"><button type="button" class="btn" data-act="retry">🔄 ลองเชื่อมต่ออีกครั้ง</button></div>
+  </div>
+</div>
+
+<div id="sheet" class="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+  <div class="sheet-card">
+    <div class="sheet-h"><img src="icon-192.png" alt="" width="52" height="52"><div><b id="sheetTitle">ติดตั้งแอปไว้บนเครื่อง</b><span>OPD แผนไทย</span></div><button type="button" class="x" data-act="close" aria-label="ปิด">✕</button></div>
+    <div id="sheetBody"></div>
+  </div>
+</div>
+
+<div id="toast" role="status" aria-live="polite" hidden></div>
+<noscript><p style="padding:24px">กรุณาเปิดใช้งาน JavaScript เพื่อใช้แอปนี้</p></noscript>
+
+<script>
+(function () {
+  'use strict';
+  var APP_URL = "https://script.google.com/macros/s/AKfycbzB3WBODwOKuHmOFu95I6TYy4os2KBvbb70p6Fm0uP-CopDxeY9fGcfyF39M8cANdv0/exec";
+  var APP_NAME = "ระบบบริการการแพทย์แผนไทยและการแพทย์ทางเลือก";
+  var SHELL_VERSION = "2.1.0-e343770b";
+  var STORE_KEY = 'ttm_shell_store';
+  var SNOOZE_KEY = 'ttm_shell_install_snooze';
+  var KEY_RE = /^ttm_(token|devices|last_user|pw_prompt_[A-Za-z0-9_-]{1,40}|dash_range)$/;
+  var ORIGIN_RE = /^https:\/\/[a-z0-9-]+\.googleusercontent\.com$/;
+  var SHARE_SVG = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="ปุ่มแชร์"><path d="M12 3v12"/><path d="M8 7l4-4 4 4"/><path d="M5 11v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8"/></svg>';
+  var el = function (id) { return document.getElementById(id); };
+  var frame = el('app');
+  var initialHref = location.href;
+  var qs = new URLSearchParams(location.search);
+  var st = { inner: null, innerOrigin: '', ready: false, loggedIn: false, share: null, go: qs.get('page') || '', prompt: null, slowTimer: 0, probeTimer: 0, retryTimer: 0, offered: false };
+
+  // ป้องกันการถูกเว็บอื่นนำไปฝัง (clickjacking)
+  if (window.top !== window.self) {
+    document.body.innerHTML = '<p style="font:16px system-ui;padding:24px">เปิดแอปนี้ได้เฉพาะในหน้าต่างของตัวเอง <a target="_top" href="' + location.href.replace(/"/g, '') + '">เปิดแอป</a></p>';
+    return;
+  }
+  if (qs.has('page') || qs.has('share') || qs.has('source')) { try { history.replaceState(null, '', location.pathname); } catch (e) { /* ignore */ } }
+
+  function isStandalone() {
+    var mm = function (q) { try { return window.matchMedia(q).matches; } catch (e) { return false; } };
+    return mm('(display-mode: standalone)') || mm('(display-mode: fullscreen)') || mm('(display-mode: minimal-ui)') || mm('(display-mode: window-controls-overlay)') || window.navigator.standalone === true;
+  }
+  function isIos() {
+    var u = navigator.userAgent || '';
+    return /iphone|ipad|ipod/i.test(u) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  }
+  function info() { return { version: SHELL_VERSION, standalone: isStandalone(), canInstall: !!st.prompt, ios: isIos(), badge: 'setAppBadge' in navigator }; }
+  function readStore() {
+    try { var o = JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); return o && typeof o === 'object' && !Array.isArray(o) ? o : {}; } catch (e) { return {}; }
+  }
+  function writeStore(o) { try { localStorage.setItem(STORE_KEY, JSON.stringify(o)); } catch (e) { /* พื้นที่เต็มหรือถูกบล็อก */ } }
+  function appUrl() { return APP_URL + (APP_URL.indexOf('?') >= 0 ? '&' : '?') + 'pwa=1'; }
+  function show(id, on) { var x = el(id); if (x) x.hidden = !on; }
+  function toast(msg, btnText, fn) {
+    var t = el('toast');
+    t.innerHTML = '';
+    var s = document.createElement('span'); s.textContent = msg; t.appendChild(s);
+    if (btnText) { var b = document.createElement('button'); b.type = 'button'; b.textContent = btnText; b.onclick = function () { t.hidden = true; fn(); }; t.appendChild(b); }
+    t.hidden = false;
+    clearTimeout(toast.tm);
+    toast.tm = setTimeout(function () { t.hidden = true; }, btnText ? 12000 : 4500);
+  }
+
+  function load() {
+    if (navigator.onLine === false) { showOffline(); return; }
+    show('offline', false); show('slow', false); show('splash', true);
+    el('splashMsg').textContent = 'กำลังเปิดระบบ…';
+    st.ready = false; st.inner = null;
+    clearTimeout(st.slowTimer); clearTimeout(st.probeTimer); clearInterval(st.retryTimer);
+    st.slowTimer = setTimeout(function () { if (!st.ready) show('slow', true); }, 20000);
+    frame.src = appUrl();
+  }
+  // ตรวจว่าออนไลน์จริงหรือไม่ (ข้าม Service Worker เพื่อถามเซิร์ฟเวอร์จริง)
+  function probe() {
+    return fetch('manifest.webmanifest?__probe=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.status > 0; }).catch(function () { return false; });
+  }
+  function showOffline() {
+    if (st.ready) return;
+    clearTimeout(st.slowTimer);
+    show('splash', false); show('offline', true);
+    clearInterval(st.retryTimer);
+    st.retryTimer = setInterval(function () {
+      if (navigator.onLine === false || el('offline').hidden) return;
+      probe().then(function (ok) { if (ok && !el('offline').hidden) load(); });
+    }, 8000);
+  }
+  // iframe โหลดเสร็จแต่ระบบไม่ตอบ → ตรวจการเชื่อมต่อ ถ้าออฟไลน์ให้แสดงหน้าออฟไลน์แทนหน้าว่าง
+  frame.addEventListener('load', function () {
+    if (st.ready || !frame.getAttribute('src')) return;
+    clearTimeout(st.probeTimer);
+    st.probeTimer = setTimeout(function () {
+      if (st.ready || st.inner) return;
+      probe().then(function (ok) { if (!ok && !st.ready && !st.inner) showOffline(); });
+    }, 5000);
+  });
+  function post(msg) { if (!st.inner) return; try { st.inner.postMessage(msg, st.innerOrigin); } catch (e) { /* ignore */ } }
+  // ยอมรับข้อความเฉพาะจากหน้าต่างที่อยู่ "ภายใน" iframe ของแอปนี้เท่านั้น
+  function fromFrame(w) {
+    try {
+      for (var i = 0; i < 6 && w; i++) {
+        if (w === frame.contentWindow) return true;
+        if (w === w.parent) return false;
+        w = w.parent;
+      }
+    } catch (e) { /* ignore */ }
+    return false;
+  }
+  function setBadge(n) {
+    n = Math.max(0, Math.floor(Number(n) || 0));
+    try {
+      if (n > 0 && navigator.setAppBadge) navigator.setAppBadge(n).catch(function () {});
+      else if (navigator.clearAppBadge) navigator.clearAppBadge().catch(function () {});
+    } catch (e) { /* ไม่รองรับ */ }
+  }
+  function persist() {
+    try { if (navigator.storage && navigator.storage.persist) navigator.storage.persisted().then(function (p) { if (!p) return navigator.storage.persist(); }).catch(function () {}); } catch (e) { /* ignore */ }
+  }
+  function flush() {
+    if (!st.ready || !st.inner) return;
+    if (st.go) { post({ type: 'ttm-go', page: st.go }); st.go = ''; }
+    if (st.share) { post({ type: 'ttm-share', share: st.share }); st.share = null; }
+  }
+  function queueShare(v) {
+    if (!v) return;
+    var files = (v.files || []).filter(function (f) { return f && typeof f === 'object' && typeof f.size === 'number' && f.size > 0; }).slice(0, 10);
+    var it = { files: files, title: String(v.title || '').slice(0, 300), text: String(v.text || '').slice(0, 20000), url: String(v.url || '').slice(0, 2000) };
+    if (!it.files.length && !it.text && !it.url) return;
+    st.share = it;
+    toast(it.files.length ? 'ได้รับ ' + it.files.length + ' ไฟล์ — กำลังเปิดหน้านำเข้าอัตโนมัติ' : 'ได้รับข้อความ/ลิงก์ — กำลังเปิดหน้านำเข้าอัตโนมัติ');
+    flush();
+  }
+
+  window.addEventListener('message', function (e) {
+    if (!ORIGIN_RE.test(e.origin) || !fromFrame(e.source)) return;
+    var d = e.data;
+    if (!d || typeof d !== 'object' || typeof d.type !== 'string') return;
+    st.inner = e.source; st.innerOrigin = e.origin;
+    switch (d.type) {
+      case 'ttm-hello':
+        post({ type: 'ttm-store', store: readStore(), launch: { page: st.go }, shell: info() });
+        st.go = '';
+        el('splashMsg').textContent = 'เชื่อมต่อแล้ว กำลังโหลดข้อมูล…';
+        break;
+      case 'ttm-ready':
+        st.ready = true; st.loggedIn = !!d.loggedIn;
+        clearTimeout(st.slowTimer);
+        show('splash', false); show('offline', false);
+        if (st.loggedIn) persist(); else setBadge(0);
+        flush();
+        if (!d.guard) maybeOfferInstall();
+        break;
+      case 'ttm-store-set':
+        if (typeof d.k !== 'string' || !KEY_RE.test(d.k)) return;
+        var s = readStore();
+        if (d.v === null || d.v === undefined) delete s[d.k];
+        else if (typeof d.v === 'string' && d.v.length <= 100000) s[d.k] = d.v;
+        writeStore(s);
+        break;
+      case 'ttm-badge': setBadge(d.count); break;
+      case 'ttm-reload': location.reload(); break;
+      case 'ttm-install': openInstall(true); break;
+      default: break;
+    }
+  });
+
+  /* ---------- ติดตั้งแอป ---------- */
+  function snoozed() { try { return Number(localStorage.getItem(SNOOZE_KEY) || 0) > Date.now(); } catch (e) { return false; } }
+  function snooze(days) { try { localStorage.setItem(SNOOZE_KEY, String(Date.now() + days * 864e5)); } catch (e) { /* ignore */ } }
+  function maybeOfferInstall() {
+    if (st.offered || isStandalone() || snoozed()) return;
+    if (!st.prompt && !isIos()) return;
+    st.offered = true;
+    setTimeout(function () { if (!isStandalone() && el('sheet').hidden) openInstall(false); }, 2500);
+  }
+  function closeSheet() { show('sheet', false); }
+  function openInstall(fromUser) {
+    var body = el('sheetBody');
+    if (isStandalone()) { if (fromUser) toast('คุณกำลังใช้งานแอปที่ติดตั้งแล้ว ✅'); return; }
+    var perks = '<ul class="perks"><li>📲 เปิดจากไอคอนในแตะเดียว</li><li>🖥️ เต็มจอ ไม่มีแถบเบราว์เซอร์</li><li>🔐 จดจำการเข้าสู่ระบบ</li><li>📤 แชร์ไฟล์เข้าแอปได้</li></ul>';
+    if (st.prompt) {
+      body.innerHTML = perks + '<div class="row"><button type="button" class="btn" data-act="install">📲 ติดตั้งเลย</button><button type="button" class="btn ghost" data-act="later">ไว้ทีหลัง</button></div>';
+    } else if (isIos()) {
+      body.innerHTML = '<ol class="steps"><li>แตะปุ่ม <b>แชร์</b> <span class="ico">' + SHARE_SVG + '</span> ของเบราว์เซอร์ (Safari: แถบด้านล่างหรือปุ่ม ⋯ • iPad: มุมขวาบน)</li><li>เลื่อนลงแล้วเลือก <b>“เพิ่มไปยังหน้าจอโฮม”</b> (Add to Home Screen)</li><li>ถ้ามีสวิตช์ <b>“เปิดเป็นแอปเว็บ”</b> ให้เปิดไว้ แล้วแตะ <b>“เพิ่ม”</b></li><li>ปิดเบราว์เซอร์ แล้วเปิดแอปจากไอคอนบนหน้าจอโฮม</li></ol><p class="muted">ใช้ได้กับ iOS / iPadOS 16.4 ขึ้นไป ทั้ง Safari, Chrome และ Edge</p><div class="row"><button type="button" class="btn ghost" data-act="later">เข้าใจแล้ว</button></div>';
+    } else {
+      body.innerHTML = '<ol class="steps"><li><b>Chrome / Edge บนคอมพิวเตอร์:</b> คลิกไอคอน “ติดตั้ง” ท้ายช่องที่อยู่เว็บ หรือเมนู ⋮ / ⋯ แล้วเลือกคำสั่งติดตั้งแอป</li><li><b>Chrome บน Android:</b> เมนู ⋮ → <b>เพิ่มลงในหน้าจอหลัก</b> → <b>ติดตั้ง</b></li><li><b>Samsung Internet:</b> เมนู ☰ → <b>เพิ่มหน้าลงใน</b> → <b>หน้าจอหลัก</b></li></ol><p class="muted">ถ้าไม่พบคำสั่งติดตั้ง ให้รีเฟรชหน้านี้ 1 ครั้งแล้วลองใหม่</p><div class="row"><button type="button" class="btn ghost" data-act="later">ปิด</button></div>';
+    }
+    show('sheet', true);
+  }
+  window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault();
+    st.prompt = e;
+    post({ type: 'ttm-shell', shell: info() });
+    if (st.ready) maybeOfferInstall();
+  });
+  window.addEventListener('appinstalled', function () {
+    st.prompt = null;
+    closeSheet();
+    toast('ติดตั้งแอปเรียบร้อยแล้ว 🎉 เปิดได้จากไอคอนบนหน้าจอ');
+    post({ type: 'ttm-shell', shell: info() });
+  });
+
+  document.addEventListener('click', function (e) {
+    var b = e.target && e.target.closest ? e.target.closest('[data-act]') : null;
+    if (!b) return;
+    var a = b.getAttribute('data-act');
+    if (a === 'retry') load();
+    else if (a === 'browser') window.open(APP_URL, '_blank', 'noopener');
+    else if (a === 'close') closeSheet();
+    else if (a === 'later') { snooze(7); closeSheet(); }
+    else if (a === 'install' && st.prompt) {
+      var p = st.prompt; st.prompt = null;
+      p.prompt();
+      p.userChoice.then(function (c) { if (!c || c.outcome !== 'accepted') snooze(7); closeSheet(); }).catch(closeSheet);
+    }
+  });
+  el('sheet').addEventListener('click', function (e) { if (e.target === el('sheet')) closeSheet(); });
+
+  /* ---------- ไฟล์ที่แชร์เข้ามา (Android) / เปิดไฟล์ด้วยแอป (คอมพิวเตอร์) ---------- */
+  function takeShare() {
+    return new Promise(function (resolve) {
+      if (!('indexedDB' in window)) { resolve(null); return; }
+      var r = indexedDB.open('ttm-share', 1);
+      r.onupgradeneeded = function () { r.result.createObjectStore('q'); };
+      r.onerror = function () { resolve(null); };
+      r.onsuccess = function () {
+        var db = r.result, v = null;
+        try {
+          var tx = db.transaction('q', 'readwrite'), os = tx.objectStore('q');
+          var g = os.get('last');
+          g.onsuccess = function () { v = g.result || null; os.delete('last'); };
+          tx.oncomplete = function () { db.close(); resolve(v); };
+          tx.onerror = function () { db.close(); resolve(null); };
+        } catch (e) { db.close(); resolve(null); }
+      };
+    });
+  }
+  if (qs.get('share') === '1') takeShare().then(queueShare);
+  if ('launchQueue' in window && window.launchQueue && window.launchQueue.setConsumer) {
+    window.launchQueue.setConsumer(function (lp) {
+      if (!lp) return;
+      if (lp.files && lp.files.length) {
+        Promise.all(lp.files.slice(0, 10).map(function (h) { return h.getFile(); })).then(function (files) { queueShare({ files: files }); }).catch(function () {});
+      } else if (lp.targetURL && lp.targetURL !== initialHref) {
+        try {
+          var u = new URL(lp.targetURL);
+          if (u.searchParams.get('page')) { st.go = u.searchParams.get('page'); flush(); }
+          if (u.searchParams.get('share') === '1') takeShare().then(queueShare);
+        } catch (e) { /* ignore */ }
+      }
+    });
+  }
+
+  /* ---------- ออนไลน์ / ออฟไลน์ / Service Worker ---------- */
+  window.addEventListener('online', function () { if (!el('offline').hidden) load(); });
+  window.addEventListener('offline', function () { if (!st.ready) showOffline(); });
+  if ('serviceWorker' in navigator) {
+    var hadCtl = !!navigator.serviceWorker.controller;
+    navigator.serviceWorker.register('sw.js', { scope: './' }).then(function (reg) {
+      setInterval(function () { reg.update().catch(function () {}); }, 6 * 3600 * 1000);
+    }).catch(function (err) { console.warn('ลงทะเบียน Service Worker ไม่สำเร็จ', err); });
+    navigator.serviceWorker.addEventListener('controllerchange', function () {
+      if (hadCtl) toast('แอปได้รับการอัปเดตแล้ว', 'โหลดใหม่', function () { location.reload(); });
+      hadCtl = true;
+    });
+  }
+  document.title = APP_NAME;
+  load();
+})();
+</script>
+</body>
+</html>
