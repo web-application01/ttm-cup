@@ -1,7 +1,7 @@
-ชุดไฟล์แอป (PWA) — ระบบบริการการแพทย์แผนไทยและการแพทย์ทางเลือก
-เวอร์ชัน 2.1.0-e343770b • สร้างเมื่อ 2026-11-02 15:47
-ระบบ (Web App): https://script.google.com/macros/s/AKfycbzB3WBODwOKuHmOFu95I6TYy4os2KBvbb70p6Fm0uP-CopDxeY9fGcfyF39M8cANdv0/exec
-ที่อยู่แอปที่ลงทะเบียนไว้: (ยังไม่ได้ลงทะเบียน — ตั้งค่าที่เมนู Admin → 📲 แอป PWA)
+ชุดไฟล์แอป (PWA) — ระบบบริการการแพทย์แผนไทยและการแพทย์ทางเลือก CUP สันทราย
+เวอร์ชัน 2.2.1-083a8180 • สร้างเมื่อ 2026-11-02 21:48
+ระบบ (Web App): https://script.google.com/macros/s/AKfycbwm9kfh_Zo_oXg4SiesbP4PctYblbX_ZPRCbyh0zDxSX7Moh0x_g2olRQa7RyvpSy7Z0Q/exec
+ที่อยู่แอปที่ลงทะเบียนไว้: https://web-application01.github.io/ttm-cup/
 
 ไฟล์ในชุดนี้ (ห้ามเปลี่ยนชื่อไฟล์ และต้องวางรวมกันในโฟลเดอร์เดียว ชั้นบนสุดของเว็บ)
   index.html              หน้าแอปหลัก ฝังระบบ Apps Script ไว้ด้านในแบบเต็มจอ
@@ -19,7 +19,7 @@
  3) Settings → Pages → Build and deployment: Source = Deploy from a branch,
     Branch = main และโฟลเดอร์ / (root) → Save แล้วรอ 1–10 นาที
  4) จะได้ที่อยู่ https://<ชื่อบัญชี>.github.io/ttm-opd/
- 5) ในระบบ: 🎨 ตั้งค่าเว็บไซต์ (Admin) → 📲 แอป PWA → วางที่อยู่ข้อ 4 → บันทึก
+ 5) ในระบบ: กด 🛡️ สำหรับเจ้าหน้าที่ (ชื่อผู้ใช้ admin) → 📲 แอป PWA → วางที่อยู่ข้อ 4 → บันทึก
  6) เปิดที่อยู่ข้อ 4 บนมือถือหรือคอมพิวเตอร์ แล้วกด "ติดตั้ง" / "เพิ่มไปยังหน้าจอโฮม"
 
 ข้อควรรู้ด้านความปลอดภัย

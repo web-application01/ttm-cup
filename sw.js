@@ -1,10 +1,10 @@
 'use strict';
 /* Service Worker ของแอปเปลือก (PWA) — สร้างอัตโนมัติจากหน้า Admin (ห้ามแก้ด้วยมือ)
- * เวอร์ชัน 2.1.0-e343770b
+ * เวอร์ชัน 2.2.1-083a8180
  * - เก็บเฉพาะไฟล์ของแอปเปลือก (หน้าเปิดแอป ไอคอน หน้าออฟไลน์) ไม่เก็บข้อมูลผู้รับบริการ
  * - ไม่ยุ่งกับคำขอที่ไปยัง Google (ข้อมูลทั้งหมดวิ่งตรงระหว่างเครื่องกับ Google Apps Script)
  */
-const VERSION = "2.1.0-e343770b";
+const VERSION = "2.2.1-083a8180";
 const CACHE = 'ttm-shell-' + VERSION;
 const SCOPE = self.registration.scope;
 const ASSETS = ['./', 'index.html', 'offline.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'icon-maskable-512.png', 'apple-touch-icon.png', 'favicon-32.png'];

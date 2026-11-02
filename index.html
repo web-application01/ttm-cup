@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>ระบบบริการการแพทย์แผนไทยและการแพทย์ทางเลือก</title>
+<title>ระบบบริการการแพทย์แผนไทยและการแพทย์ทางเลือก CUP สันทราย</title>
 <meta name="description" content="OPD Card แพทย์แผนไทย สำหรับ รพ.สต.">
 <meta name="application-name" content="OPD แผนไทย">
 <meta name="theme-color" content="#3BAF85">
@@ -11,8 +11,8 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; frame-src https://script.google.com https://*.googleusercontent.com; connect-src 'self'; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=083a8180">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=083a8180">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="OPD แผนไทย">
@@ -34,6 +34,10 @@ p{line-height:1.65;margin:.5rem 0}
 .btn.ghost{background:#fff;color:var(--ink);box-shadow:inset 0 0 0 1.5px rgba(36,65,58,.2)}
 .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px}
 .big{font-size:3rem;line-height:1}
+.url{display:inline-block;max-width:100%;overflow-wrap:anywhere;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.82rem;background:#F3FBF7;border-radius:8px;padding:2px 8px}
+.warn-h{font-weight:700;color:#A4462F;margin-top:14px}
+#peekBar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:15;display:flex;gap:10px;align-items:center;max-width:calc(100% - 24px);background:#FFF4E5;color:#6B3E0B;border-radius:14px;padding:8px 10px 8px 14px;font-size:.9rem;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+#peekBar button{border:0;background:var(--theme);color:#fff;border-radius:10px;padding:7px 12px;font:inherit;font-weight:700;cursor:pointer;white-space:nowrap}
 .tips{text-align:left;margin:.6rem auto 0;padding-left:1.2rem;color:var(--muted);font-size:.92rem;line-height:1.7}
 .sheet{position:fixed;inset:0;z-index:20;display:flex;align-items:flex-end;justify-content:center;background:rgba(20,40,34,.38);animation:fade .2s ease}
 .sheet-card{width:100%;max-width:520px;max-height:90%;overflow:auto;background:#fff;border-radius:26px 26px 0 0;padding:18px 18px calc(18px + env(safe-area-inset-bottom,0px));box-shadow:0 -10px 40px rgba(0,0,0,.16);animation:up .28s cubic-bezier(.2,.8,.2,1)}
@@ -58,17 +62,27 @@ p{line-height:1.65;margin:.5rem 0}
 </style>
 </head>
 <body>
-<iframe id="app" title="ระบบบริการการแพทย์แผนไทยและการแพทย์ทางเลือก" allow="clipboard-read; clipboard-write; fullscreen; camera; microphone; web-share; autoplay"></iframe>
+<iframe id="app" title="ระบบบริการการแพทย์แผนไทยและการแพทย์ทางเลือก CUP สันทราย" allow="clipboard-read; clipboard-write; fullscreen; camera; microphone; web-share; autoplay"></iframe>
 
 <div id="splash" class="layer">
   <div class="card">
     <img class="logo" src="icon-192.png" alt="" width="96" height="96">
-    <h1>ระบบบริการการแพทย์แผนไทยและการแพทย์ทางเลือก</h1>
-    <div class="spin" aria-hidden="true"></div>
+    <h1>ระบบบริการการแพทย์แผนไทยและการแพทย์ทางเลือก CUP สันทราย</h1>
+    <div class="spin" id="spin" aria-hidden="true"></div>
     <p id="splashMsg" class="muted">กำลังเปิดระบบ…</p>
     <div id="slow" hidden>
       <p class="muted">ใช้เวลานานกว่าปกติ อาจเป็นเพราะสัญญาณอินเทอร์เน็ตหรือเซิร์ฟเวอร์ Google ตอบช้า</p>
       <div class="row"><button type="button" class="btn" data-act="retry">🔄 ลองใหม่</button><button type="button" class="btn ghost" data-act="browser">🌐 เปิดในเบราว์เซอร์</button></div>
+    </div>
+    <div id="nohello" hidden>
+      <p class="warn-h">⚠️ ระบบยังไม่ตอบกลับ</p>
+      <p class="muted">แอปนี้เชื่อมต่อไปที่<br><span class="url" id="appUrlTxt"></span></p>
+      <ul class="tips">
+        <li>ถ้าสัญญาณอินเทอร์เน็ตช้า กด <b>ลองใหม่</b></li>
+        <li>กด <b>ดูหน้าที่โหลดได้</b> ถ้าเห็นระบบอื่น หน้าให้เข้าสู่ระบบ Google หรือหน้าแจ้งข้อผิดพลาด แสดงว่าที่อยู่ระบบในชุดไฟล์แอปนี้ไม่ถูกต้อง กรุณาแจ้งเจ้าหน้าที่ผู้ดูแลระบบ</li>
+        <li>เจ้าหน้าที่: เปิดระบบในเบราว์เซอร์ → 🛡️ สำหรับเจ้าหน้าที่ → 📲 แอป PWA ระบบจะตรวจที่อยู่ให้ แก้ตามที่แนะนำ แล้วดาวน์โหลดชุดไฟล์แอปใหม่ไปวางทับ</li>
+      </ul>
+      <div class="row"><button type="button" class="btn" data-act="retry">🔄 ลองใหม่</button><button type="button" class="btn ghost" data-act="peek">👀 ดูหน้าที่โหลดได้</button></div>
     </div>
   </div>
 </div>
@@ -90,15 +104,16 @@ p{line-height:1.65;margin:.5rem 0}
   </div>
 </div>
 
+<div id="peekBar" role="status" hidden><span>⚠️ ระบบยังไม่ตอบกลับ — กำลังแสดงหน้าที่โหลดได้</span><button type="button" data-act="retry">🔄 ลองใหม่</button></div>
 <div id="toast" role="status" aria-live="polite" hidden></div>
 <noscript><p style="padding:24px">กรุณาเปิดใช้งาน JavaScript เพื่อใช้แอปนี้</p></noscript>
 
 <script>
 (function () {
   'use strict';
-  var APP_URL = "https://script.google.com/macros/s/AKfycbzB3WBODwOKuHmOFu95I6TYy4os2KBvbb70p6Fm0uP-CopDxeY9fGcfyF39M8cANdv0/exec";
-  var APP_NAME = "ระบบบริการการแพทย์แผนไทยและการแพทย์ทางเลือก";
-  var SHELL_VERSION = "2.1.0-e343770b";
+  var APP_URL = "https://script.google.com/macros/s/AKfycbwm9kfh_Zo_oXg4SiesbP4PctYblbX_ZPRCbyh0zDxSX7Moh0x_g2olRQa7RyvpSy7Z0Q/exec";
+  var APP_NAME = "ระบบบริการการแพทย์แผนไทยและการแพทย์ทางเลือก CUP สันทราย";
+  var SHELL_VERSION = "2.2.1-083a8180";
   var STORE_KEY = 'ttm_shell_store';
   var SNOOZE_KEY = 'ttm_shell_install_snooze';
   var KEY_RE = /^ttm_(token|devices|last_user|pw_prompt_[A-Za-z0-9_-]{1,40}|dash_range)$/;
@@ -108,7 +123,8 @@ p{line-height:1.65;margin:.5rem 0}
   var frame = el('app');
   var initialHref = location.href;
   var qs = new URLSearchParams(location.search);
-  var st = { inner: null, innerOrigin: '', ready: false, loggedIn: false, share: null, go: qs.get('page') || '', prompt: null, slowTimer: 0, probeTimer: 0, retryTimer: 0, offered: false };
+  var st = { inner: null, innerOrigin: '', ready: false, hello: false, loggedIn: false, share: null, go: qs.get('page') || '', prompt: null, slowTimer: 0, probeTimer: 0, retryTimer: 0, offered: false };
+  var HELLO_MS = 15000, READY_MS = 30000;
 
   // ป้องกันการถูกเว็บอื่นนำไปฝัง (clickjacking)
   if (window.top !== window.self) {
@@ -142,13 +158,27 @@ p{line-height:1.65;margin:.5rem 0}
     toast.tm = setTimeout(function () { t.hidden = true; }, btnText ? 12000 : 4500);
   }
 
+  function shortUrl(u) {
+    var m = /\/s\/([A-Za-z0-9_-]+)\/exec/.exec(u);
+    return m && m[1].length > 24 ? u.replace(m[1], m[1].slice(0, 12) + '…' + m[1].slice(-6)) : u;
+  }
+  // ไม่ได้รับสัญญาณจากระบบเลย = หน้าที่โหลดใน iframe ไม่ใช่ระบบนี้ (ที่อยู่ผิด / โค้ดชุดเก่า / ต้องเข้าสู่ระบบ Google) หรือเน็ตช้ามาก
+  function noHello() {
+    if (st.ready || st.hello) return;
+    el('appUrlTxt').textContent = shortUrl(APP_URL);
+    show('spin', false); show('splashMsg', false); show('slow', false); show('nohello', true);
+  }
+  function waitReady(ms) {
+    clearTimeout(st.slowTimer);
+    st.slowTimer = setTimeout(function () { if (!st.ready) { if (st.hello) show('slow', true); else noHello(); } }, ms);
+  }
   function load() {
     if (navigator.onLine === false) { showOffline(); return; }
-    show('offline', false); show('slow', false); show('splash', true);
+    show('offline', false); show('slow', false); show('nohello', false); show('peekBar', false); show('spin', true); show('splashMsg', true); show('splash', true);
     el('splashMsg').textContent = 'กำลังเปิดระบบ…';
-    st.ready = false; st.inner = null;
-    clearTimeout(st.slowTimer); clearTimeout(st.probeTimer); clearInterval(st.retryTimer);
-    st.slowTimer = setTimeout(function () { if (!st.ready) show('slow', true); }, 20000);
+    st.ready = false; st.hello = false; st.inner = null;
+    clearTimeout(st.probeTimer); clearInterval(st.retryTimer);
+    waitReady(HELLO_MS);
     frame.src = appUrl();
   }
   // ตรวจว่าออนไลน์จริงหรือไม่ (ข้าม Service Worker เพื่อถามเซิร์ฟเวอร์จริง)
@@ -220,12 +250,18 @@ p{line-height:1.65;margin:.5rem 0}
       case 'ttm-hello':
         post({ type: 'ttm-store', store: readStore(), launch: { page: st.go }, shell: info() });
         st.go = '';
+        if (!st.hello) {
+          st.hello = true;
+          show('nohello', false); show('peekBar', false); show('spin', true); show('splashMsg', true);
+          if (!st.ready) show('splash', true);
+          waitReady(READY_MS - HELLO_MS);
+        }
         el('splashMsg').textContent = 'เชื่อมต่อแล้ว กำลังโหลดข้อมูล…';
         break;
       case 'ttm-ready':
         st.ready = true; st.loggedIn = !!d.loggedIn;
         clearTimeout(st.slowTimer);
-        show('splash', false); show('offline', false);
+        show('splash', false); show('offline', false); show('nohello', false); show('peekBar', false);
         if (st.loggedIn) persist(); else setBadge(0);
         flush();
         if (!d.guard) maybeOfferInstall();
@@ -286,6 +322,7 @@ p{line-height:1.65;margin:.5rem 0}
     var a = b.getAttribute('data-act');
     if (a === 'retry') load();
     else if (a === 'browser') window.open(APP_URL, '_blank', 'noopener');
+    else if (a === 'peek') { show('splash', false); show('peekBar', true); }
     else if (a === 'close') closeSheet();
     else if (a === 'later') { snooze(7); closeSheet(); }
     else if (a === 'install' && st.prompt) {
