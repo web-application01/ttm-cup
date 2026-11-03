@@ -1,5 +1,5 @@
 ชุดไฟล์แอป (PWA) — ระบบบริการการแพทย์แผนไทยและการแพทย์ทางเลือก CUP สันทราย
-เวอร์ชัน 2.5.1-cd2f6519 • สร้างเมื่อ 2026-11-03 20:21
+เวอร์ชัน 2.5.1-6ae96fde • สร้างเมื่อ 2026-11-03 20:34
 ระบบ (Web App): https://script.google.com/macros/s/AKfycbwm9kfh_Zo_oXg4SiesbP4PctYblbX_ZPRCbyh0zDxSX7Moh0x_g2olRQa7RyvpSy7Z0Q/exec
 ที่อยู่แอปที่ลงทะเบียนไว้: https://web-application01.github.io/ttm-cup/
 
