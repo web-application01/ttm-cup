@@ -6,19 +6,19 @@
 <title>ระบบบริการการแพทย์แผนไทยและการแพทย์ทางเลือก CUP สันทราย</title>
 <meta name="description" content="OPD Card แพทย์แผนไทย สำหรับ รพ.สต.">
 <meta name="application-name" content="OPD แผนไทย">
-<meta name="theme-color" content="#3BAF85">
+<meta name="theme-color" content="#9B7EDE">
 <meta name="color-scheme" content="light">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; frame-src https://script.google.com https://*.googleusercontent.com; connect-src 'self'; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=083a8180">
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=083a8180">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="OPD แผนไทย">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <style>
-:root{--theme:#3BAF85;--bg:#F3FBF7;--ink:#24413A;--muted:#5E7A72}
+:root{--theme:#9B7EDE;--bg:#f9dcf9;--ink:#24413A;--muted:#5E7A72}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI","Noto Sans Thai","Leelawadee UI",Tahoma,sans-serif;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
 #app{position:fixed;top:env(safe-area-inset-top,0px);left:env(safe-area-inset-left,0px);width:calc(100% - env(safe-area-inset-left,0px) - env(safe-area-inset-right,0px));height:calc(100% - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));border:0;display:block;background:transparent}
@@ -113,7 +113,7 @@ p{line-height:1.65;margin:.5rem 0}
   'use strict';
   var APP_URL = "https://script.google.com/macros/s/AKfycbwm9kfh_Zo_oXg4SiesbP4PctYblbX_ZPRCbyh0zDxSX7Moh0x_g2olRQa7RyvpSy7Z0Q/exec";
   var APP_NAME = "ระบบบริการการแพทย์แผนไทยและการแพทย์ทางเลือก CUP สันทราย";
-  var SHELL_VERSION = "2.2.1-083a8180";
+  var SHELL_VERSION = "2.4.0-127e1036";
   var STORE_KEY = 'ttm_shell_store';
   var SNOOZE_KEY = 'ttm_shell_install_snooze';
   var KEY_RE = /^ttm_(token|devices|last_user|pw_prompt_[A-Za-z0-9_-]{1,40}|dash_range)$/;
@@ -141,7 +141,23 @@ p{line-height:1.65;margin:.5rem 0}
     var u = navigator.userAgent || '';
     return /iphone|ipad|ipod/i.test(u) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   }
-  function info() { return { version: SHELL_VERSION, standalone: isStandalone(), canInstall: !!st.prompt, ios: isIos(), badge: 'setAppBadge' in navigator }; }
+  function info() { return { version: SHELL_VERSION, standalone: isStandalone(), canInstall: !!st.prompt, ios: isIos(), badge: 'setAppBadge' in navigator, cred: credOk() }; }
+  // ตัวจัดการรหัสผ่านของเบราว์เซอร์ (Chrome / Edge) ทำงานได้เฉพาะหน้าต่างบนสุด จึงทำแทนระบบที่อยู่ใน iframe
+  function credOk() { return !!(window.PasswordCredential && navigator.credentials && navigator.credentials.get && navigator.credentials.store); }
+  function credGet(d) {
+    if (!credOk()) { post({ type: 'ttm-cred', req: d.req, ok: false, unsupported: true }); return; }
+    var med = d.mediation === 'silent' ? 'silent' : 'optional';
+    navigator.credentials.get({ password: true, mediation: med }).then(function (c) {
+      if (c && c.type === 'password' && c.password) post({ type: 'ttm-cred', req: d.req, ok: true, id: String(c.id || ''), password: String(c.password) });
+      else post({ type: 'ttm-cred', req: d.req, ok: false });
+    }).catch(function () { post({ type: 'ttm-cred', req: d.req, ok: false }); });
+  }
+  function credStore(d) {
+    if (!credOk() || typeof d.id !== 'string' || typeof d.password !== 'string' || !d.id || !d.password || d.id.length > 200 || d.password.length > 500) { post({ type: 'ttm-cred-stored', req: d.req, ok: false }); return; }
+    var c;
+    try { c = new window.PasswordCredential({ id: d.id, password: d.password, name: String(d.name || d.id).slice(0, 120) }); } catch (e) { post({ type: 'ttm-cred-stored', req: d.req, ok: false }); return; }
+    navigator.credentials.store(c).then(function () { post({ type: 'ttm-cred-stored', req: d.req, ok: true }); }).catch(function () { post({ type: 'ttm-cred-stored', req: d.req, ok: false }); });
+  }
   function readStore() {
     try { var o = JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); return o && typeof o === 'object' && !Array.isArray(o) ? o : {}; } catch (e) { return {}; }
   }
@@ -274,6 +290,9 @@ p{line-height:1.65;margin:.5rem 0}
         writeStore(s);
         break;
       case 'ttm-badge': setBadge(d.count); break;
+      case 'ttm-cred-get': credGet(d); break;
+      case 'ttm-cred-store': credStore(d); break;
+      case 'ttm-cred-off': try { if (navigator.credentials && navigator.credentials.preventSilentAccess) navigator.credentials.preventSilentAccess(); } catch (e) { /* ignore */ } break;
       case 'ttm-reload': location.reload(); break;
       case 'ttm-install': openInstall(true); break;
       default: break;
