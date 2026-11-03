@@ -11,8 +11,8 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; frame-src https://script.google.com https://*.googleusercontent.com; connect-src 'self'; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=c31a1d40">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=c31a1d40">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="OPD แผนไทย">
@@ -25,7 +25,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--
 .layer{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(160deg,#FFFFFF 0%,var(--bg) 70%)}
 [hidden]{display:none!important}
 .card{width:100%;max-width:430px;text-align:center;background:rgba(255,255,255,.9);border-radius:28px;padding:28px 22px;box-shadow:0 18px 50px rgba(36,65,58,.12)}
-.logo{border-radius:26px;box-shadow:0 10px 26px rgba(36,65,58,.16);animation:pop .5s ease both}
+.logo{border-radius:26px;box-shadow:0 10px 26px rgba(36,65,58,.16);transform-origin:50% 92%;animation:pop .5s ease both,alive 4.2s ease-in-out .5s infinite}
 h1{font-size:1.12rem;line-height:1.5;margin:14px 0 4px}
 p{line-height:1.65;margin:.5rem 0}
 .muted{color:var(--muted);font-size:.92rem}
@@ -56,6 +56,7 @@ p{line-height:1.65;margin:.5rem 0}
 #toast button{border:0;background:#fff;color:#24413A;border-radius:10px;padding:6px 10px;font:inherit;font-weight:700;cursor:pointer;white-space:nowrap}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes pop{from{transform:scale(.85);opacity:0}}
+@keyframes alive{0%,100%{transform:translateY(0) rotate(0) scale(1,1)}15%{transform:scale(1.03,.97)}30%{transform:translateY(-7px) rotate(-3deg) scale(.99,1.01)}45%{transform:scale(1.02,.98)}60%{transform:translateY(-5px) rotate(3deg) scale(.99,1.01)}75%{transform:scale(1.01,.99)}}
 @keyframes up{from{transform:translateY(40px);opacity:0}}
 @keyframes fade{from{opacity:0}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important}}
@@ -66,7 +67,7 @@ p{line-height:1.65;margin:.5rem 0}
 
 <div id="splash" class="layer">
   <div class="card">
-    <img class="logo" src="icon-192.png" alt="" width="96" height="96">
+    <img class="logo" src="icon-192.png?v=c31a1d40" alt="" width="96" height="96">
     <h1>ระบบบริการการแพทย์แผนไทยและการแพทย์ทางเลือก CUP สันทราย</h1>
     <div class="spin" id="spin" aria-hidden="true"></div>
     <p id="splashMsg" class="muted">กำลังเปิดระบบ…</p>
@@ -99,7 +100,7 @@ p{line-height:1.65;margin:.5rem 0}
 
 <div id="sheet" class="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
   <div class="sheet-card">
-    <div class="sheet-h"><img src="icon-192.png" alt="" width="52" height="52"><div><b id="sheetTitle">ติดตั้งแอปไว้บนเครื่อง</b><span>OPD แผนไทย</span></div><button type="button" class="x" data-act="close" aria-label="ปิด">✕</button></div>
+    <div class="sheet-h"><img src="icon-192.png?v=c31a1d40" alt="" width="52" height="52"><div><b id="sheetTitle">ติดตั้งแอปไว้บนเครื่อง</b><span>OPD แผนไทย</span></div><button type="button" class="x" data-act="close" aria-label="ปิด">✕</button></div>
     <div id="sheetBody"></div>
   </div>
 </div>
@@ -113,7 +114,7 @@ p{line-height:1.65;margin:.5rem 0}
   'use strict';
   var APP_URL = "https://script.google.com/macros/s/AKfycbwm9kfh_Zo_oXg4SiesbP4PctYblbX_ZPRCbyh0zDxSX7Moh0x_g2olRQa7RyvpSy7Z0Q/exec";
   var APP_NAME = "ระบบบริการการแพทย์แผนไทยและการแพทย์ทางเลือก CUP สันทราย";
-  var SHELL_VERSION = "2.4.0-127e1036";
+  var SHELL_VERSION = "2.5.1-cd2f6519";
   var STORE_KEY = 'ttm_shell_store';
   var SNOOZE_KEY = 'ttm_shell_install_snooze';
   var KEY_RE = /^ttm_(token|devices|last_user|pw_prompt_[A-Za-z0-9_-]{1,40}|dash_range)$/;
